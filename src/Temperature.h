@@ -4,38 +4,54 @@
 #include <Arduino.h>
 #include <PwmControl.h>
 
+// the number of averages to store and calculate on
+#define AVERAGE_COUNT 1000
+
+// temperature reading
 class Temperature
 {
   private:
-    static const uint16_t AverageCount = 1000;
-
+    // thermistor divider sense pin
     uint8_t pin;
+    // pwm control object
     PwmControl *pwmControl;
 
+    // position in average array
     uint16_t position;
-    uint16_t values[Temperature::AverageCount];
+    // average array
+    uint16_t values[AVERAGE_COUNT];
+    // average temperature
     uint32_t average;
 
-    uint16_t temp_min = 65535, temp_max; //, temp_current;
-    uint16_t temp_max_normal, temp_current_normal, temp_factor_full;
+    // min and max temperatures
+    uint16_t temp_min = 65535, temp_max;
+    // normalised temperatures
+    uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
+    // normalised temperature factor
     double temp_factor;
 
   public:
     Temperature(uint8_t pin, PwmControl *pwmControl)
     {
+        // store values locally
         this->pin = pin;
         this->pwmControl = pwmControl;
 
+        // set pin mode
         pinMode(this->pin, INPUT_ANALOG);
 
+        // for storing initial value
         uint16_t initial_value;
 
+        // hit ADC a few times to stabilise it
         for (uint16_t i = 0; i < 10000; i++)
         {
+            // store initial value
             initial_value = analogRead(this->pin);
         }
 
-        for (uint16_t i = 0; i < Temperature::AverageCount; i++)
+        // blanket change average values to initial value
+        for (uint16_t i = 0; i < AVERAGE_COUNT; i++)
         {
             values[i] = initial_value;
         }
@@ -43,25 +59,33 @@ class Temperature
 
     void Tick()
     {
+        // get current value
         uint16_t new_value = analogRead(pin);
 
-        if (position == Temperature::AverageCount)
+        // if current position is past end of array then reset
+        if (position == AVERAGE_COUNT)
         {
             position = 0;
         }
 
+        // set value in average array
         values[position] = new_value;
-        average = values[0];
+        // set initial array value
+        average = 0;
 
-        for (uint16_t i = 1; i < Temperature::AverageCount; i++)
+        // add up all values
+        for (uint16_t i = 0; i < AVERAGE_COUNT; i++)
         {
             average += values[i];
         }
 
-        average /= Temperature::AverageCount;
+        // divide to get average
+        average /= AVERAGE_COUNT;
 
+        // increment position
         position++;
 
+        // set minimum and maximum observed temperatures as required
         if (average < temp_min)
         {
             temp_min = average;
@@ -72,19 +96,23 @@ class Temperature
             temp_max = average;
         }
 
+        // set normalised values
         temp_max_normal = temp_max - temp_min;
         temp_current_normal = average - temp_min;
 
+        // set factored values
         temp_factor = (double)temp_current_normal / (double)temp_max_normal;
 
         temp_factor_full = temp_factor * pwmControl->getPwmMaxValue();
     }
 
+    // get final uint 16 output value (full range)
     uint16_t getTempFactorFull()
     {
         return temp_factor_full;
     }
 
+    // get temperature readout for serial
     String getReadOut()
     {
         String result = "";

@@ -31,11 +31,13 @@ class PwmOutput
         this->pwmControl = pwmControl;
         this->temperature = temperature;
 
-        this->min_value = pwmControl->getPwmMaxValue() * min_factor;
-        this->max_value = pwmControl->getPwmMaxValue() * max_factor;
+        this->min_value = pwmControl->getPwmMaxValue() * this->min_factor;
+        this->max_value = pwmControl->getPwmMaxValue() * this->max_factor;
 
         this->counts = ticks_per_second / UPDATES_PER_SECOND;
         this->counter = this->counts;
+
+        pinMode(this->pin, PWM);
     }
 
     void Tick()
