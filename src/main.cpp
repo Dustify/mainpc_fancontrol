@@ -99,6 +99,12 @@ void loop()
     tick();
 #endif
 
+    // loop to allow serial interruption (hopefully)
+    while (Serial.available())
+    {
+        Serial.read();
+    }
+
     // print output to serial
     Serial.print(temperature.getReadOut());
     Serial.print(pumpOutput.getValue());
