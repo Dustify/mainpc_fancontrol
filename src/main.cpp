@@ -18,9 +18,9 @@
 
 // valid values between 0 and 1
 // minimum pump speed
-#define PUMP_MIN_FACTOR 0.02
+#define PUMP_MIN_FACTOR 0.10
 // maximum pump speed
-#define PUMP_MAX_FACTOR 0.25
+#define PUMP_MAX_FACTOR 1.00
 // minimum fan speed
 #define FAN_MIN_FACTOR 0.00
 // maximum fan speed
