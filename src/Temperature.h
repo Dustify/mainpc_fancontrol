@@ -6,6 +6,8 @@
 
 // the number of averages to store and calculate on
 #define AVERAGE_COUNT 1000
+// ignore temperature readings below this level
+#define MIN_TEMP 2250
 
 // temperature reading
 class Temperature
@@ -84,6 +86,13 @@ class Temperature
 
         // increment position
         position++;
+
+        // override minimum temperature
+        // this is to ensure that a cold system doesn't skew the learning
+        if (average < MIN_TEMP)
+        {
+            average = MIN_TEMP;
+        }
 
         // set minimum and maximum observed temperatures as required
         if (average < temp_min)
