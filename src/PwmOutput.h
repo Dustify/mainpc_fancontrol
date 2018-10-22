@@ -1,11 +1,11 @@
 #ifndef PWMOUTPUT_H
 #define PWMOUTPUT_H
 
-#include <Arduino.h>
-#include <PwmControl.h>
-#include <Temperature.h>
+#include "config.h"
 
-#define UPDATES_PER_SECOND 1
+#include <Arduino.h>
+#include "PwmControl.h"
+#include "Temperature.h"
 
 class PwmOutput
 {

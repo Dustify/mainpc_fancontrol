@@ -1,13 +1,10 @@
 #ifndef TEMPERATURE_H
 #define TEMPERATURE_H
 
+#include "config.h"
+
 #include <Arduino.h>
 #include <PwmControl.h>
-
-// the number of averages to store and calculate on
-#define AVERAGE_COUNT 1000
-// ignore temperature readings below this level
-#define MIN_TEMP 2250
 
 // temperature reading
 class Temperature
@@ -26,7 +23,7 @@ class Temperature
     uint32_t average;
 
     // min and max temperatures
-    uint16_t temp_min = 65535, temp_max;
+    uint16_t temp_min = 65535, temp_max = MAX_TEMP;
     // normalised temperatures
     uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
     // normalised temperature factor
