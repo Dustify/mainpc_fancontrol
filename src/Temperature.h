@@ -109,7 +109,9 @@ class Temperature
         // set factored values
         temp_factor = (double)temp_current_normal / (double)temp_max_normal;
 
-        temp_factor_full = temp_factor * pwmControl->getPwmMaxValue();
+        //temp_factor_full = temp_factor * pwmControl->getPwmMaxValue();
+
+        temp_factor_full = pow(temp_factor, EXPO) * pwmControl->getPwmMaxValue();
     }
 
     // get final uint 16 output value (full range)

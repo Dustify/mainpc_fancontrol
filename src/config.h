@@ -18,7 +18,7 @@
 
 // valid values between 0 and 1
 // minimum pump speed
-#define PUMP_MIN_FACTOR 0.00
+#define PUMP_MIN_FACTOR 0.05
 // maximum pump speed
 #define PUMP_MAX_FACTOR 1.00
 // minimum fan speed
@@ -33,6 +33,8 @@
 #define AVERAGE_COUNT 1000
 // ignore temperature readings below this level (will not decrease, is not treated as default)
 #define MIN_TEMP 2343
+
+#define EXPO 10.0
 
 // serial bps
 #define SERIAL_BAUD 9600
