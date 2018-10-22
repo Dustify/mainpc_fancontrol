@@ -27,7 +27,7 @@ class PwmOutput
     uint16_t counts, counter;
 
   public:
-    PwmOutput(uint8_t pin, double min_factor, double max_factor, uint16_t ticks_per_second, PwmControl *pwmControl, Temperature *temperature)
+    PwmOutput(uint8_t pin, double min_factor, double max_factor, PwmControl *pwmControl, Temperature *temperature)
     {
         // set values locally as requried
         this->pin = pin;
@@ -37,7 +37,7 @@ class PwmOutput
         this->min_value = pwmControl->getPwmMaxValue() * min_factor;
         this->max_value = pwmControl->getPwmMaxValue() * max_factor;
 
-        this->counts = ticks_per_second / UPDATES_PER_SECOND;
+        this->counts = TICKS_PER_SECOND / UPDATES_PER_SECOND;
         this->counter = this->counts;
 
         // set pin mode

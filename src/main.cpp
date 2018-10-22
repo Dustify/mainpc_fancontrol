@@ -19,7 +19,6 @@ PwmOutput pumpOutput(
     PIN_PUMP,
     PUMP_MIN_FACTOR,
     PUMP_MAX_FACTOR,
-    TICKS_PER_SECOND,
     &pwmControl,
     &temperature);
 
@@ -27,7 +26,6 @@ PwmOutput fanOutput(
     PIN_FAN,
     FAN_MIN_FACTOR,
     FAN_MAX_FACTOR,
-    TICKS_PER_SECOND,
     &pwmControl,
     &temperature);
 

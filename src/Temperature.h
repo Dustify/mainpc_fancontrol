@@ -23,7 +23,7 @@ class Temperature
     uint32_t average;
 
     // min and max temperatures
-    uint16_t temp_min = 65535, temp_max = MAX_TEMP;
+    uint16_t temp_min = 65535, temp_max;
     // normalised temperatures
     uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
     // normalised temperature factor
