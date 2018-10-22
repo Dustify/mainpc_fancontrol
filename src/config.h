@@ -20,7 +20,7 @@
 // minimum pump speed
 #define PUMP_MIN_FACTOR 0.05
 // maximum pump speed
-#define PUMP_MAX_FACTOR 0.25
+#define PUMP_MAX_FACTOR 0.05
 // minimum fan speed
 #define FAN_MIN_FACTOR 0.00
 // maximum fan speed
