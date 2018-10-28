@@ -28,6 +28,8 @@ class Temperature
     uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
     // normalised temperature factor
     double temp_factor;
+    // normalised temperature factor with expo
+    double temp_factor_expo;
 
   public:
     Temperature(uint8_t pin, PwmControl *pwmControl)
@@ -109,9 +111,9 @@ class Temperature
         // set factored values
         temp_factor = (double)temp_current_normal / (double)temp_max_normal;
 
-        //temp_factor_full = temp_factor * pwmControl->getPwmMaxValue();
+        temp_factor_expo = pow(temp_factor, EXPO);
 
-        temp_factor_full = pow(temp_factor, EXPO) * pwmControl->getPwmMaxValue();
+        temp_factor_full = temp_factor_expo * pwmControl->getPwmMaxValue();
     }
 
     // get final uint 16 output value (full range)
@@ -136,6 +138,8 @@ class Temperature
         result += temp_max_normal;
         result += " ";
         result += temp_factor;
+        result += " ";
+        result += temp_factor_expo;
         result += ") ";
 
         return result;
