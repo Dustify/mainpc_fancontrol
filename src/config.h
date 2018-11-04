@@ -31,10 +31,9 @@
 
 // the number of averages to store and calculate on
 #define AVERAGE_COUNT 1000
-// ignore temperature readings below this level (will not decrease, is not treated as default)
-#define MIN_TEMP 0
 
-#define EXPO 10.0
+// 'expo' value for easing rates
+#define EXPO 5.0
 
 // serial bps
 #define SERIAL_BAUD 9600

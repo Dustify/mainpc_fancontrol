@@ -27,6 +27,8 @@ class PwmOutput
     uint16_t counts, counter;
 
   public:
+    uint16_t override_value;
+
     PwmOutput(uint8_t pin, double min_factor, double max_factor, PwmControl *pwmControl, Temperature *temperature)
     {
         // set values locally as requried
@@ -59,12 +61,19 @@ class PwmOutput
         counter = 0;
 
         // set value
-        value =
-            map(temperature->getTempFactorFull(),
-                0,
-                pwmControl->getPwmMaxValue(),
-                min_value,
-                max_value);
+        if (override_value > 0)
+        {
+            value = override_value;
+        }
+        else
+        {
+            value =
+                map(temperature->getTempFactorFull(),
+                    0,
+                    pwmControl->getPwmMaxValue(),
+                    min_value,
+                    max_value);
+        }
 
         // write value to pwm pin
         pwmWrite(pin, value);

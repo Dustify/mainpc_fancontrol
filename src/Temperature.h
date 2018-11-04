@@ -22,8 +22,6 @@ class Temperature
     // average temperature
     uint32_t average;
 
-    // min and max temperatures
-    uint16_t temp_min = 65535, temp_max;
     // normalised temperatures
     uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
     // normalised temperature factor
@@ -32,11 +30,18 @@ class Temperature
     double temp_factor_expo;
 
   public:
+    // expo
+    double expo;
+
+    // min and max temperatures
+    uint16_t temp_min = 65535, temp_max;
+
     Temperature(uint8_t pin, PwmControl *pwmControl)
     {
         // store values locally
         this->pin = pin;
         this->pwmControl = pwmControl;
+        this->expo = EXPO;
 
         // set pin mode
         pinMode(this->pin, INPUT_ANALOG);
@@ -86,13 +91,6 @@ class Temperature
         // increment position
         position++;
 
-        // override minimum temperature
-        // this is to ensure that a cold system doesn't skew the learning
-        if (average < MIN_TEMP)
-        {
-            average = MIN_TEMP;
-        }
-
         // set minimum and maximum observed temperatures as required
         if (average < temp_min)
         {
@@ -111,7 +109,7 @@ class Temperature
         // set factored values
         temp_factor = (double)temp_current_normal / (double)temp_max_normal;
 
-        temp_factor_expo = pow(temp_factor, EXPO);
+        temp_factor_expo = pow(temp_factor, expo);
 
         temp_factor_full = temp_factor_expo * pwmControl->getPwmMaxValue();
     }
