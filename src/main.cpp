@@ -29,9 +29,28 @@ PwmOutput fanOutput(
     &pwmControl,
     &temperature);
 
+const uint16_t ticksPerBlink = TICKS_PER_SECOND / 2;
+uint16_t tickCounter = 0;
+
 // wrapper to call tick on objects when required
 void tick()
 {
+    if (tickCounter == 0)
+    {
+        digitalWrite(LED_BUILTIN, LOW);
+    }
+    else if (tickCounter == ticksPerBlink)
+    {
+        digitalWrite(LED_BUILTIN, HIGH);
+    }
+
+    tickCounter++;
+
+    if (tickCounter > TICKS_PER_SECOND)
+    {
+        tickCounter = 0;
+    }
+
     temperature.Tick();
     pumpOutput.Tick();
     fanOutput.Tick();
@@ -137,13 +156,6 @@ void processSerial()
 // main loop
 void loop()
 {
-    // LED on
-    digitalWrite(LED_BUILTIN, LOW);
-    delay(500);
-    // LED off
-    digitalWrite(LED_BUILTIN, HIGH);
-    delay(500);
-
 // save start time if benchmarking and call tick
 #ifdef BENCHMARK
     uint32_t start = micros();
