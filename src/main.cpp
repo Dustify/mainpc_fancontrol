@@ -75,7 +75,7 @@ void setup()
     pinMode(LED_BUILTIN, OUTPUT);
 }
 
-const uint8_t frameLength = 4;
+const uint8_t frameLength = 5;
 const uint8_t frameLengthAdjusted = frameLength - 1;
 
 void processSerial()
@@ -109,48 +109,68 @@ void processSerial()
 
     if (checksum != serialBuffer[frameLengthAdjusted])
     {
-        Serial.print("Bad checksum: ");
-        Serial.print(serialBuffer[frameLengthAdjusted]);
-        Serial.print(" ");
-        Serial.print(checksum);
-        Serial.println();
+        Serial.println("Error");
         return;
     }
 
-    Serial.println("Good checksum");
-
     uint8_t operation = serialBuffer[0];
-    uint16_t value = serialBuffer[1] << 8 | serialBuffer[2];
+    uint8_t function = serialBuffer[1];
+    uint16_t value = serialBuffer[2] << 8 | serialBuffer[3];
 
-    Serial.print("Operation: ");
-    Serial.print(serialBuffer[0]);
-    Serial.print(" Value: ");
-    Serial.print(value);
-    Serial.println();
+    if (operation == 1)
+    {
+        switch (function)
+        {
+        // pump speed override
+        case 0:
+            pumpOutput.override_value = value;
+            break;
+        // fan speed override
+        case 1:
+            fanOutput.override_value = value;
+            break;
+        // min temp
+        case 2:
+            temperature.temp_min = value;
+            break;
+        // max temp
+        case 3:
+            temperature.temp_max = value;
+            break;
+        // expo
+        case 4:
+            temperature.expo = value;
+            break;
+        }
+    }
 
-    switch (operation)
+    uint16_t result = 0;
+
+    switch (function)
     {
     // pump speed override
     case 0:
-        pumpOutput.override_value = value;
+        result = pumpOutput.override_value;
         break;
     // fan speed override
     case 1:
-        fanOutput.override_value = value;
+        result = fanOutput.override_value;
         break;
     // min temp
     case 2:
-        temperature.temp_min = value;
+        result = temperature.temp_min;
         break;
     // max temp
     case 3:
-        temperature.temp_max = value;
+        result = temperature.temp_max;
         break;
     // expo
     case 4:
-        temperature.expo = value;
+        result = temperature.expo;
         break;
     }
+
+    Serial.println(result);
 }
 
 // main loop
@@ -163,14 +183,6 @@ void loop()
 #endif
 
     processSerial();
-
-    // print output to serial
-    Serial.print(temperature.getReadOut());
-    Serial.print(pumpOutput.getValue());
-    Serial.print(" ");
-    Serial.print(fanOutput.getValue());
-
-    Serial.println();
 
 // print possible ticks per second if benchmarking
 #ifdef BENCHMARK
