@@ -168,6 +168,18 @@ void processSerial()
     case 4:
         result = temperature.expo;
         break;
+    // current temp
+    case 5:
+        result = temperature.average;
+        break;
+    // current pump speed
+    case 6:
+        result = pumpOutput.getValue();
+        break;
+    // current fan speed
+    case 7:
+        result = fanOutput.getValue();
+        break;
     }
 
     Serial.println(result);

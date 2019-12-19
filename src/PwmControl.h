@@ -21,7 +21,7 @@ class PwmControl
         timer.resume();
 
         // find adjusted max value
-        this->pwm_max_value = (1098.649576562142 / pwm_frequency) * 65535;
+        this->pwm_max_value = (1098.649576562142 / (double)pwm_frequency) * 65535.0;
     }
 
     uint16_t getPwmMaxValue()

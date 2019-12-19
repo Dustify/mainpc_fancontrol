@@ -19,8 +19,6 @@ class Temperature
     uint16_t position;
     // average array
     uint16_t values[AVERAGE_COUNT];
-    // average temperature
-    uint32_t average;
 
     // normalised temperatures
     uint16_t temp_current_normal, temp_max_normal, temp_factor_full;
@@ -35,6 +33,9 @@ class Temperature
 
     // min and max temperatures
     uint16_t temp_min = 65535, temp_max;
+
+    // average temperature
+    uint32_t average;
 
     Temperature(uint8_t pin, PwmControl *pwmControl)
     {
@@ -118,29 +119,6 @@ class Temperature
     uint16_t getTempFactorFull()
     {
         return temp_factor_full;
-    }
-
-    // get temperature readout for serial
-    String getReadOut()
-    {
-        String result = "";
-
-        result += temp_min;
-        result += " < ";
-        result += average;
-        result += " < ";
-        result += temp_max;
-        result += " (";
-        result += temp_current_normal;
-        result += "/";
-        result += temp_max_normal;
-        result += " ";
-        result += temp_factor;
-        result += " ";
-        result += temp_factor_expo;
-        result += ") ";
-
-        return result;
     }
 };
 
